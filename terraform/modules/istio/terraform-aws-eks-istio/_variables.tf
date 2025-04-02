@@ -30,7 +30,7 @@ variable "helm_chart_repo" {
 
 variable "helm_chart_version" {
   type        = string
-  default     = "1.13.3"
+  default     = "1.25.1"
   description = "Istio helm chart version."
 }
 
