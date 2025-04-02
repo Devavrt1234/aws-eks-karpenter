@@ -78,4 +78,19 @@ resource "helm_release" "istio_ingressgateway" {
     name  = "securityContext.runAsNonRoot"
     value = true
   }
+
+   values = [
+    yamlencode(merge(
+      var.ingressgateway_settings[count.index].settings,
+      {
+        tolerations = [
+          {
+            key      = "CriticalAddonsOnly"
+            operator = "Exists"
+          }
+        ]
+      }
+    ))
+  ]
+
 }
