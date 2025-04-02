@@ -1,5 +1,18 @@
+                                                                   helm.tf *
+data "external" "namespace_check" {
+  program = ["bash", "-c", <<EOT
+  if kubectl get namespace ${var.namespace} > /dev/null 2>&1; then
+    echo '{"exists": "true"}'
+  else
+    echo '{"exists": "false"}'
+  fi
+  EOT
+  ]
+}
+
+
 resource "kubernetes_namespace" "istio" {
-  count = (var.enabled && var.create_namespace && var.namespace != "kube-system") ? 1 : 0
+  count = data.external.namespace_check.result["exists"] == "false" ? 1 : 0
 
    metadata {
     name = var.namespace
@@ -7,6 +20,10 @@ resource "kubernetes_namespace" "istio" {
       "istio-injection" = "enabled"
     }
   }
+}
+
+output "namespace_message" {
+  value = data.external.namespace_check.result["exists"] == "true" ?  "Namespace ${var.namespace} already exists, skipping creation.":"Namespace ${var.namespace} doe>
 }
 
 resource "helm_release" "istio_base" {
