@@ -291,3 +291,30 @@ resource "kubectl_manifest" "karpenter_example_deployment" {
     helm_release.karpenter
   ]
 }
+
+module "istio" {
+  source                 = "./modules/istio/terraform-aws-eks-istio" # Path to your module directory
+  cluster_name           = "karpenter-managed-cluster"   # Change to your EKS cluster name
+  namespace              = "istio-system"
+  helm_chart_repo        = "https://istio-release.storage.googleapis.com/charts"
+  helm_chart_version     = "1.25.1" # Change as needed
+  enabled                = true
+  base_enabled           = true
+  istiod_enabled         = true
+  ingressgateway_enabled = true
+
+  base_settings = {} # Add any required Istio base settings
+
+  istiod_settings = {} # Add any Istiod settings
+
+  ingressgateway_settings = [
+    {
+      name     = "istio-ingressgateway"
+      settings = {} # Add Ingress Gateway settings if needed
+    }
+  ]
+}
+
+
+
+
