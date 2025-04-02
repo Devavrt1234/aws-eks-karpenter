@@ -7,4 +7,4 @@ aws_account_id = "565393066140"
 ###############################################################################
 # Cluster
 ###############################################################################
-cluster_name = "karpenter-managed-cluster-new"
+cluster_name = "karpenter-managed-cluster-1"
