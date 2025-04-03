@@ -82,7 +82,7 @@ resource "helm_release" "istio_ingressgateway" {
   namespace  = var.namespace
 
   set {
-    name  = "securityContext.fsGroup"
+    name  = "securityContext.runAsUser"
     value = 1337
   }
 
