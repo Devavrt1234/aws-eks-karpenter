@@ -1,4 +1,4 @@
-                                                                   helm.tf *
+          
 data "external" "namespace_check" {
   program = ["bash", "-c", <<EOT
   if kubectl get namespace ${var.namespace} > /dev/null 2>&1; then
