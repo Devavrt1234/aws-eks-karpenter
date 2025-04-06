@@ -66,6 +66,12 @@ variable "cluster_name" {
   type    = string
 }
 
+variable "region" {
+
+    default="us-east-1"
+    type=string
+}
+
 variable "aws_region" {
 
     default="us-east-1"
