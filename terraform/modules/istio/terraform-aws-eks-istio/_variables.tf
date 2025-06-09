@@ -62,18 +62,23 @@ variable "ingressgateway_settings" {
 }
 
 variable "cluster_name" {
-  default = "karpenter-managed-cluster"
+  default = ""
   type    = string
 }
 
 variable "region" {
 
-    default="us-east-1"
+    default="us-east-2"
     type=string
 }
 
 variable "aws_region" {
 
-    default="us-east-1"
+    default="us-east-2"
     type   = string
+}
+
+variable "enable_cluster_lookup" {
+  type    = bool
+  default = true
 }

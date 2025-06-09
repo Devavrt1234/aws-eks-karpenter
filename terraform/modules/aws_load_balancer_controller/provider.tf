@@ -1,6 +1,15 @@
-provider "aws" {
-  region = var.aws_region
+
+# Fetch EKS Cluster Data
+data "aws_eks_cluster" "cluster" {
+  count = var.enable_cluster_lookup ? 1 : 0
+  name = var.cluster_name
 }
+
+data "aws_eks_cluster_auth" "cluster" {
+  count = var.enable_cluster_lookup ? 1 : 0
+  name = var.cluster_name
+}
+
 
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.cluster[0].endpoint
@@ -24,13 +33,21 @@ provider "kubectl" {
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster[0].certificate_authority[0].data)
 }
 
-# Fetch EKS Cluster Data
-data "aws_eks_cluster" "cluster" {
-  count = var.enable_cluster_lookup ? 1 : 0
-  name = var.cluster_name
-}
+terraform {
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.24"
+    }
 
-data "aws_eks_cluster_auth" "cluster" {
-  count = var.enable_cluster_lookup ? 1 : 0
-  name = var.cluster_name
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.13"
+    }
+
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = "~> 1.14"
+    }
+  }
 }
